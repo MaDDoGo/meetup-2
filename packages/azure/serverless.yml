@@ -1,0 +1,19 @@
+# serverless.yml
+# https://serverless.com/framework/docs/providers/azure/guide/functions/
+
+service: azfx-node-http
+
+provider:
+  name: azure
+  location: West US
+
+plugins:
+  - serverless-azure-functions
+
+functions:
+  hello:
+     handler: templates/handler.hello
+     events:
+       - http: true
+         x-azure-settings:
+           authLevel : anonymous

@@ -1,0 +1,23 @@
+# serverless.yml
+# https://serverless.com/framework/docs/providers/google/guide/functions/
+
+service: my-gcloud-service
+
+provider:
+  name: google
+  memorySize: 1024
+  timeout: 90s
+
+plugins:
+  - serverless-google-cloudfunctions
+functions:
+  first:
+    handler: index.first
+    events:
+      - http: path
+  second:
+    handler: index.second
+    memorySize: 512
+    timeout: 120s
+    events:
+      - http: path

@@ -1,0 +1,17 @@
+{
+  "name": "alibaba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "sls deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Enric Soler Rastrollo",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-aliyun-function-compute": "^1.2.1"
+  },
+  "dependencies": {}
+}
