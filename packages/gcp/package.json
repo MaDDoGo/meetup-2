@@ -1,5 +1,5 @@
 {
-  "name": "gcp",
+  "name": "@serverless-bcn/gcp-function",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,5 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "serverless-google-cloudfunctions": "^2.3.2"
+  },
+  "dependencies": {
+    "@google-cloud/bigtable": "^1.0.1"
   }
 }

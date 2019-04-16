@@ -1,5 +1,5 @@
 {
-  "name": "aws",
+  "name": "@serverless-bcn/aws-function",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

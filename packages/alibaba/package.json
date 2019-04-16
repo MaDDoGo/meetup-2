@@ -1,5 +1,5 @@
 {
-  "name": "alibaba",
+  "name": "@serverless-bcn/ali-function",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
