@@ -1,42 +1,70 @@
-// https://github.com/googleapis/nodejs-bigtable
+const express = require('express');
+const Firestore = require('@google-cloud/firestore');
 
-const Bigtable = require('@google-cloud/bigtable');
+const PROJECTID = 'ricosega';
+const COLLECTION_NAME = 'cloud-functions-firestore';
 
-// The name of the Cloud Bigtable instance
-const INSTANCE_NAME = 'my-bigtable-instance';
-// The name of the Cloud Bigtable table
-const TABLE_NAME = 'my-table';
+const app = express();
+const firestore = new Firestore({
+    projectId: PROJECTID,
+    timestampsInSnapshots: true
+    // NOTE don't hardcode your project credentials here.
+    // If you have to, export the following to your shell:
+    //   GOOGLE_APPLICATION_CREDENTIALS=<path>
+    // keyFilename: '/cred/cloud-functions-firestore-000000000000.json',
+  });
 
+app.put('/id/:id', (req, res) => {
+    // store/insert a new document
+    const id = req.params.id;
 
-const init = async () => {
-  // Creates a Bigtable client
-  const bigtable = new Bigtable();
+    // .add() will automatically assign an id
+    return firestore
+    .collection(COLLECTION_NAME)
+    .doc(id)
+    .set({
+        data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }).then(doc => {
+      console.info('stored new doc id#', doc.id);
+      return res.status(200).send(doc);
+    }).catch(err => {
+      console.error(err);
+      return res.status(404).send({
+        error: 'unable to store',
+        err
+      });
+    });
+});
 
-  // Connect to an existing instance:my-bigtable-instance
-  const instance = bigtable.instance(INSTANCE_NAME);
+app.get('/id/:id', (req, res) => {
+    const { id } = req.params;
 
-  // Connect to an existing table:my-table
-  const table = instance.table(TABLE_NAME);
+    // read/retrieve an existing document by id
+  return firestore.collection(COLLECTION_NAME)
+  .doc(id)
+  .get()
+  .then(doc => {
+    if (!(doc && doc.exists)) {
+      return res.status(404).send({
+        error: 'Unable to find the document'
+      });
+    }
+    const data = doc.data();
+    if (!data) {
+      return res.status(404).send({
+        error: 'Found document is empty'
+      });
+    }
+    return res.status(200).send(data);
+  }).catch(err => {
+    console.error(err);
+    return res.status(404).send({
+      error: 'Unable to retrieve the document',
+      err
+    });
+  });
+});
 
-  return { instance, table };
-};
-
-// Google Cloud Platform
-// https://cloud.google.com/functions/docs/writing/http
-const gcpHandler = async (req, res) => {
-  req.status(200).send({});
-  const { table } = init();
-
-  const [result] = await table.insert([{
-    key: 'alincoln',
-    data: {
-      follows: {
-        gwashington: 1,
-      },
-    },
-  }]);
-
-  const [res] = await table.row(id).get();
-
-  return res.status(200).send(result);
+module.exports = {
+    app,
 };
