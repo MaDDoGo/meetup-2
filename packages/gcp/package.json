@@ -17,6 +17,6 @@
     "@google-cloud/bigtable": "^1.0.1",
     "@google-cloud/firestore": "0.17.0",
     "semver": "^5.5.1",
-    "express": "^4.16.4"
+    "express": "^4.18.2"
   }
 }
